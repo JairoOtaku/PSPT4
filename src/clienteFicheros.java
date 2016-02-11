@@ -5,6 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -125,7 +127,22 @@ public class clienteFicheros extends JFrame implements Runnable {
         });
         vista.botonActualizar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                PideDirectorio pd = new PideDirectorio(direcSelec);
+                Object pd = new PideDirectorio();
+                try {
+                    outObjeto.writeObject(pd);
+                    Raiz = (EstructuraFicheros) inObjeto.readObject();
+                    EstructuraFicheros[] nodos = Raiz.getLista();
+                    direcSelec = Raiz.getPath();
+                    llenarLista(nodos, Raiz.getNumeFich());
+                    vista.cab3.setText("RAIZ: " + direcSelec);
+                    vista.cab.setText("CONECTADO AL SERVIDOR DE FICHEROS");
+                    vista.campo2.setText("Número de ficheros en el directorio: " + Raiz.getNumeFich());
+                    JOptionPane.showMessageDialog(null, "Lista actualizada.");
+                } catch (IOException ex) {
+                    Logger.getLogger(clienteFicheros.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(clienteFicheros.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }

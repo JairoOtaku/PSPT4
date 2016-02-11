@@ -42,11 +42,6 @@ public class Interfaz extends javax.swing.JFrame {
 
         cab.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
 
-        listaDirec.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
         jScrollPane1.setViewportView(listaDirec);
 
         botonCargar.setText("Subir fichero");

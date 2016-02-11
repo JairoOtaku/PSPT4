@@ -1,4 +1,3 @@
-
 import java.io.*;
 import java.net.*;
 import javax.swing.*;
@@ -8,9 +7,10 @@ public class Servidor {
     static Integer PUERTO = 44441;
     static public EstructuraFicheros NF;
     static ServerSocket servidor;
+    static String Directorio;
 
     public static void main(String[] args) throws IOException {
-        String Directorio = "";
+        Directorio = "";
         JFileChooser f = new JFileChooser();
         f.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         f.setDialogTitle("SELECCIONA EL DIRECTORIO DONDE ESTAN LOS FICHEROS");
@@ -38,6 +38,5 @@ public class Servidor {
                 System.exit(0);
             }
         }
-
     }
 }

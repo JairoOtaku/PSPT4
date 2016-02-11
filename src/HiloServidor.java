@@ -35,6 +35,13 @@ public class HiloServidor extends Thread {
                     EstructuraFicheros n = new EstructuraFicheros(fic.getDirectorio());
                     outObjeto.writeObject(n);
                 }
+                if(peticion instanceof PideDirectorio){
+                    PideDirectorio dir = (PideDirectorio) peticion;
+                    if(dir.confirmacion == true){
+                        NF = new EstructuraFicheros(Servidor.Directorio);
+                        outObjeto.writeObject(NF);
+                    }
+                }
             }
         } catch (IOException e) {
             try {

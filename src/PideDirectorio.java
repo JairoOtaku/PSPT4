@@ -2,14 +2,10 @@
 import java.io.Serializable;
 
 public class PideDirectorio implements Serializable {
+    
+    boolean confirmacion;
 
-    String nombreDirectorio;
-
-    public PideDirectorio(String nombreDirectorio) {
-        this.nombreDirectorio = nombreDirectorio;
-    }
-
-    public String getNombreDirectorio() {
-        return nombreDirectorio;
+    public PideDirectorio() {
+        confirmacion = true;
     }
 }

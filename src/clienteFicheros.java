@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.*;
@@ -13,13 +14,13 @@ public class clienteFicheros extends JFrame implements Runnable{
     ObjectInputStream inObjeto;
     ObjectOutputStream outObjeto;
     EstructuraFicheros Raiz;
-    static JList listaDirec = new JList();
     static String direcSelec = "";
     static String ficheroSelec = "";
     static String ficherocompleto = "";
     
+    static Interfaz vista = new Interfaz();
+    
     public clienteFicheros(Socket s) throws IOException{
-        super("SERVIDOR DE FICHEROS BÁSICO");
         socket = s;
         try{
             outObjeto = new ObjectOutputStream(socket.getOutputStream());
@@ -28,25 +29,25 @@ public class clienteFicheros extends JFrame implements Runnable{
             e.printStackTrace();
             System.exit(0);
         }
-        listaDirec.addListSelectionListener(new ListSelectionListener() {
+        vista.listaDirec.addListSelectionListener(new ListSelectionListener() {
 
             @Override
             public void valueChanged(ListSelectionEvent lse) {
                 if(lse.getValueIsAdjusting()){
                     ficheroSelec = "";
                     ficherocompleto = "";
-                    nodo = (EstructuraFicheros) listaDirec.getSelectedValue();
+                    nodo = (EstructuraFicheros) vista.listaDirec.getSelectedValue();
                     if (nodo.isDir()){
-                        campo.setText("FUNCIÓN NO IMPLEMENTADA...");
+                        vista.campo.setText("FUNCIÓN NO IMPLEMENTADA...");
                     }else{
                         ficheroSelec = nodo.getName();
                         ficherocompleto = nodo.getPath();
-                        campo.setText("FICHERO seleccionado: " + ficheroSelec);
+                        vista.campo.setText("FICHERO seleccionado: " + ficheroSelec);
                     }
                 }
             }
         });
-        botonSalir.addActionListener(new ActionListener() {
+        vista.botonSalir.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
                 try{
                     socket.close();
@@ -56,7 +57,7 @@ public class clienteFicheros extends JFrame implements Runnable{
                 }
             }
         });
-        botonDescargar.addActionListener(new ActionListener() {
+        vista.botonDescargar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
                 if(ficherocompleto.equals("")){
                     return;
@@ -79,7 +80,7 @@ public class clienteFicheros extends JFrame implements Runnable{
                 }
             }
         });
-        botonCargar.addActionListener(new ActionListener() {
+        vista.botonCargar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
                 JFileChooser f;
                 File file;
@@ -102,14 +103,14 @@ public class clienteFicheros extends JFrame implements Runnable{
                             j++;
                         }
                         in.close();
-                        Object ff = EnviaFichero(buff, nombreArchivo, direcSelec);
+                        Object ff = new EnviaFichero(buff, nombreArchivo, direcSelec);
                         outObjeto.writeObject(ff);
                         JOptionPane.showMessageDialog(null, "FICHERO CARGADO");
                         nodo = (EstructuraFicheros) inObjeto.readObject();
                         EstructuraFicheros[] lista = nodo.getLista();
                         direcSelec = nodo.getPath();
                         llenarLista(lista, nodo.getNumeFich());
-                        campo2.setText("Número de ficheros en el directorio: " + lista.length);
+                        vista.campo2.setText("Número de ficheros en el directorio: " + lista.length);
                     }catch(FileNotFoundException e1){
                         e1.printStackTrace();
                     }catch(IOException ee){
@@ -125,23 +126,25 @@ public class clienteFicheros extends JFrame implements Runnable{
     public static void main(String[] args) throws IOException{
         int puerto = 44441;
         Socket s = new Socket("localhost", puerto);
+        vista.setTitle("SERVIDOR DE FICHEROS BÁSICO");
+        vista.pack();
+        vista.setLocationRelativeTo(null);
+        vista.setVisible(true);
         clienteFicheros hiloC = new clienteFicheros(s);
-        hiloC.setBounds(0, 0, 540, 500);
-        hiloC.setVisible(true);
         new Thread(hiloC).start();
     }
 
     @Override
     public void run() {
         try{
-            cab.setText("Conectando con el servidor...");
+            vista.cab.setText("Conectando con el servidor...");
             Raiz = (EstructuraFicheros) inObjeto.readObject();
             EstructuraFicheros[] nodos = Raiz.getLista();
             direcSelec = Raiz.getPath();
             llenarLista(nodos, Raiz.getNumeFich());
-            cab3.setText("RAIZ: " + direcSelec);
-            cab.setText("CONECTADO AL SERVIDOR DE FICHEROS");
-            campo2.setText("Número de ficheros en el directorio: " + Raiz.getNumeFich());
+            vista.cab3.setText("RAIZ: " + direcSelec);
+            vista.cab.setText("CONECTADO AL SERVIDOR DE FICHEROS");
+            vista.campo2.setText("Número de ficheros en el directorio: " + Raiz.getNumeFich());
         }catch(IOException e1){
             e1.printStackTrace();
             System.exit(1);
@@ -157,15 +160,15 @@ public class clienteFicheros extends JFrame implements Runnable{
         }
         DefaultListModel modeloLista = new DefaultListModel();
         modeloLista = new DefaultListModel();
-        listaDirec.setForeground(Color.blue);
+        vista.listaDirec.setForeground(Color.blue);
         Font fuente = new Font("Courier", Font.PLAIN, 12);
-        listaDirec.setFont(fuente);
-        listaDirec.removeAll();
+        vista.listaDirec.setFont(fuente);
+        vista.listaDirec.removeAll();
         for(int i = 0; i < files.length; i++){
             modeloLista.addElement(files[i]);
         }
         try{
-            listaDirec.setModel(modeloLista);
+            vista.listaDirec.setModel(modeloLista);
         }catch(NullPointerException n){
             
         }

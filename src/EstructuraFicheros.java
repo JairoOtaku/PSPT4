@@ -1,3 +1,4 @@
+
 import java.io.*;
 
 public class EstructuraFicheros implements Serializable {
@@ -8,7 +9,6 @@ public class EstructuraFicheros implements Serializable {
     private int numeFich;
     private EstructuraFicheros[] lista;
 
-    //Primer constructor
     public EstructuraFicheros(String name) throws FileNotFoundException {
         File file = new File(name);
         this.name = file.getName();
@@ -24,7 +24,6 @@ public class EstructuraFicheros implements Serializable {
         }
     }
 
-    //Segundo Constructor
     public EstructuraFicheros(String name, String path, boolean isDir, int numF) {
         this.name = name;
         this.path = path;
@@ -32,7 +31,6 @@ public class EstructuraFicheros implements Serializable {
         this.numeFich = numF;
     }
 
-    //Metodos para obtener valores de los atributos
     public String getName() {
         String name_dir = name;
         if (isDir) {
@@ -72,12 +70,11 @@ public class EstructuraFicheros implements Serializable {
         EstructuraFicheros[] lista = null;
         String sDirectorio = this.path;
         File f = new File(sDirectorio);
-        File[] ficheros = f.listFiles();//ficheros del directorio
-        int longitud = ficheros.length;//nº de ficheros del directorio
+        File[] ficheros = f.listFiles();
+        int longitud = ficheros.length;
 
-        if (longitud > 0) {//si esta vacio no se llena la lista
+        if (longitud > 0) {
             lista = new EstructuraFicheros[longitud];
-            //se recorre el array de ficheros para llenasr la lista
             for (int x = 0; x < ficheros.length; x++) {
                 EstructuraFicheros elemento;
                 String nombre = ficheros[x].getName();
@@ -91,11 +88,9 @@ public class EstructuraFicheros implements Serializable {
                     }
                 }
                 elemento = new EstructuraFicheros(nombre, path, isDir, num);
-                lista[x] = elemento;//se va llenando la lista
-            }//for
+                lista[x] = elemento;
+            }
         }
-
         return lista;
     }
-
 }

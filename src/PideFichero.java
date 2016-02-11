@@ -1,11 +1,15 @@
+
 import java.io.*;
 
-public class PideFichero implements Serializable{
+public class PideFichero implements Serializable {
+
     String nombreFichero;
-    public PideFichero(String nombreFichero){
+
+    public PideFichero(String nombreFichero) {
         this.nombreFichero = nombreFichero;
     }
-    public String getNombreFichero(){
+
+    public String getNombreFichero() {
         return nombreFichero;
     }
 }
